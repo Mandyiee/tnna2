@@ -1,0 +1,1 @@
+web gunicorn tnna.wsgi:application --log-file -
