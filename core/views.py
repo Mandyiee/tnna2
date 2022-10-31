@@ -14,7 +14,7 @@ def index(request):
     filepath = 'news.json'
     if os.path.exists(Path(os.path.join(Path.cwd(),filepath))):  
         os.remove(filepath)
-    subprocess.run(["scrapy", "crawl"])
+   
     f = open(filepath,'r')
     data = f.read()
     print(data)
