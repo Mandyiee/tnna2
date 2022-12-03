@@ -1,0 +1,211 @@
+{% extends 'main.html' %} {% load static %} 
+{% block title %} Home Page {% endblock title %}
+  {% block mainscreen %}
+
+  <li class="active"><a class="" href="/">Home</a></li>
+
+
+      <li><a class="" href="/profile">Get An API Key</a></li>
+
+      
+      <li><a class="" href="{% url 'account_logout' %}">Logout</a></li>
+      {% endblock mainscreen %}
+  {% block mobilescreen %}
+
+
+    <li class="active"><a class="" href="/">Home</a></li>
+
+      <li><a class="" href="/profile">Get An API Key</a></li>
+
+      
+      <li><a class="" href="{% url 'account_logout' %}">Logout</a></li>
+      {% endblock mobilescreen %}
+      
+{% block content %} 
+<style>
+  .main-heading {
+    height: calc(100vh - 100px);
+    width: 100%;
+    position: relative;
+  }
+  .main-heading-text {
+    position: absolute;
+    bottom: 2rem;
+    right: 15px;
+  }
+  .second-heading,.fourth-heading {
+min-height: 60vh;
+width: 100%;
+
+background-color: var( --primary-background);
+
+}
+  .second-heading > *{
+   
+    background-color: var( --primary-background);
+      }
+  .second-heading > * > *{
+   
+  background-color: var( --primary-background);
+   }
+  .second-heading > * > * > *{
+   
+   background-color: var( --primary-background);
+ }
+  .second-line {
+    width: 2rem;
+    height: 100%;
+    background-color: var( --secondary-background) !important;
+  }
+  .third-line {
+    width: 2rem;
+    height: 100%;
+    background-color:var( --primary-background) !important;
+  }
+  .third-heading > *{
+   
+    background-color: var( --secondary-background);
+      }
+  .third-heading > * > *{
+   
+  background-color: var( --secondary-background);
+   }
+  .third-heading > * > * > *{
+   
+   background-color: var( --secondary-background);
+ }
+ .third-heading {
+  min-height: 60vh;
+  width: 100%;
+  
+  background-color: var( --secondary-background);
+
+}
+ul {
+  list-style-type: none;
+}
+</style>
+
+<div class="">
+<div class="main-heading">
+  <div class="main-heading-img-con" style="height:100%;width:100%;">
+    <img src="{% static 'istockphoto-532389864-612x612.jpg' %}" alt="" class="main-heading-img" style="height:100%;width:100%;">
+  </div>
+
+  <div class="main-heading-text" style="background:transparent;">
+    <h1 style="background:transparent;text-shadow: 1px 1px 2px #fff;font-size:3rem;"> The Nigerian News API</h1>
+    <h3 style="background:transparent;"> TNNA</h3>
+  </div>
+</div>
+<div class="row-cols-3"">
+  <div class="second-heading row align-items-center" style="margin: 0 !important;">
+    
+    <div class="second-line-info px-2 py-2 col-md-8 col-sm-12">
+      <h2 class="text-center text-capitalize">
+        Getting the latest news from the best Nigerian website
+      </h2>
+    </div>
+    <div class="second-line-img col-md-4 px-2 col-sm-12 text-center" ><ul style="border-radius: 100%;" class="grid">
+      <li class="g-row-sm-6">Guardian</li>
+      <li class="g-row-sm-6">Channel</li>
+      <li class="g-row-sm-6">Legit</li>
+      <li class="g-row-sm-6">Tribune</li>
+      <li class="g-row-sm-6">Leadership</li>
+      <li class="g-row-sm-6">Independent</li>
+      <li class="g-row-sm-6">TheWill</li>
+      <li class="g-row-sm-6">DailyPost</li>
+      <li class="g-row-sm-6">PremiumTimes</li>
+      <li class="g-row-sm-6">Naija</li>
+    </ul></div>
+  </div>
+  <div class="third-heading row align-items-center px-2" style="margin: 0 !important;">   
+    <div class="third-line-img-con col-md-4 col-sm-12">
+    <code>
+    {
+      'title': 'This is the news article's title... ',
+     'link': 'The link to the news article... ', 
+    'excerpt': 'This is a short description of the article... ',
+     'imageLink': 'This is a link to the article's image... '
+    'time': 'This is the time that the article was posted'
+    }
+     </code>
+    </div>
+    <div class="third-line-info col-md-8 col-sm-12">
+      <h2 class="text-capitalize">Delivering the Nigerian News in the JSON format</h2>
+    </div>
+   
+  </div>
+  <div class="row align-items-center second-heading" style="margin: 0 !important;">
+    <h2 class="text-center col-12 py-2">The Easy Design</h2>
+    <div>
+      <div class="code-fetch text-center">
+        <span class="text-center" style="width: 80%;">{{ request.build_absolute_uri }}api?api_key={api_key}</span>
+      </div>
+    
+     
+      <div class="d-grid gap-2 col-3 mx-auto go py-3">
+        <input type="text" name="" value="{{ request.build_absolute_uri }}api?api_key={api_key}" id="api_key" style="overflow:hidden;background-color:transparent;opacity:0;" readonly>
+        <button class="btn btn-dark" type="button" id="button" onclick="myFunction(event)">Copy To Clipboard</button>
+      </div>
+      {% if mobj %}
+      <div class="json-result-con row align-items-center py-2 my-2">
+        <div class="json col-6">{{ mobj }}</div>
+        <div class="json-result col-6"><div class="card mb-3" style="max-width: 540px;">
+          <div class="row g-0">
+            <div class="col-md-4 align-self-center">
+              <img src="{{ obj.imageLink}}" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ obj.title }}</h5>
+                <p class="card-text">{{ obj.excerpt }}</p>
+                <p class="card-text"><small class="text-muted">Last updated {{obj.time}}</small></p>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+      {% endif %}
+      
+    </div>
+  </div>
+  
+</div>
+
+</div>
+
+<script>
+  const button = document.getElementById("button")
+
+  function  myFunction(event) {
+      event.preventDefault();
+      const  copyText = document.getElementById("api_key");
+      copyText.select();
+      document.execCommand("copy");
+      button.textContent = 'Copied';
+      const  myTimeout = setTimeout(function() {
+          button.textContent = 'Copy To Clipboard';
+      },  500);
+
+  }
+</script>
+	{% comment %} <div class=" container-fluid news-con py-3 px-3">
+	  {% for datum in data %}
+	  <div class="news rounded " style="background: black;">
+	    <a href="{{datum.link}}">
+	    <div class="new-image-con">
+	      <img class="new-image" src="{{datum.imageurl}}" alt="" />
+	     </div>
+	     <div class="new-content" style="background: transparent;">
+	       <h5 class="text-center" style="background: transparent;color:var(--secondary-color);">{{datum.interest | title}}</h5>
+	       <h3 class="py-1" style="background: transparent;">{{datum.title | title | truncatewords:13}}</h3>
+	       <p class="" style="background: transparent;">{{datum.excerpt|truncatewords:24}}</p>
+	     </div>
+	     </a>
+	  </div>
+	  
+ 
+	   {% endfor %}
+	  </div> {% endcomment %}
+
+{% endblock content %}

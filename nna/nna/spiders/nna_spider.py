@@ -1,6 +1,6 @@
 import scrapy
-from inline_requests import inline_requests
-from scrapy import Spider, Request
+#from inline_requests import inline_requests
+#from scrapy import Spider, Request
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
@@ -22,7 +22,7 @@ class Guardian(scrapy.Spider):
         yield {
            'title': response.css('.article-header .title::text').get(),
            'link': response.url,
-           'imageLink': response.css('div > img::attr("src")').get(),
+           'imageLink': response.css(' img::attr("data-lazy-src")').get() or response.css('p > img::attr("data-lazy-src")').get(),
            'excerpt': response.css('.article-header .excerpt .excerpt::text').get().strip(),
            'date_posted': response.css('.article-header .subhead div .date::text').get().strip(),
            'site':'Guardian'

@@ -1,0 +1,146 @@
+
+{% load static %}
+{% load i18n %}
+{% load account%}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{% static 'tnna-icon.png' %}" type="image/x-icon">
+  <link rel="icon" href="{% static 'tnna-icon.png' %}" type="image/x-icon">
+    <link href="{% static 'index.css' %}" rel="stylesheet">
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous"> 
+  <title>Login Page</title>
+<style>
+p {
+  background:transparent;
+}
+p label, p input[type=text],p input[type=password] {
+  margin: 5px 10px;
+}
+p label {
+  background:transparent;
+
+}
+p input[type=text],p input[type=password] {
+  width: 75%;
+  line-height: 30px;
+  padding: 5px 8px;
+  background:transparent;
+  border: 1px solid whitesmoke;
+  outline: none;
+  border-radius: 4px;
+  margin: 0 auto;
+}
+p input:focus,p input:active {
+  background:transparent;
+}
+.input-space {
+ margin: 0 auto;
+ width: 80%;
+ background:transparent;
+
+}
+#id_remember {
+  display: inline-block;
+  accent-color: var(--secondary-color);
+}
+.secondaryAction {
+  background: transparent;
+}
+h1 {
+  background: transparent;
+}
+</style>
+</head>
+
+<body>
+<nav class="navbar" style="position:absolute;top:0;left:0;background: var(--primary-background);z-index:100000;">
+  <div class="container" style="background: var(--primary-background);">
+    
+    <img class="" style="background: var(--primary-background);" src="https://see.fontimg.com/api/renderfont4/Ea2nl/eyJyIjoiZnMiLCJoIjo5OCwidyI6MTUwMCwiZnMiOjY1LCJmZ2MiOiIjRkZGRkZGIiwiYmdjIjoiI0ZGRkZGRiIsInQiOjF9/VE5OQQ/riseofbeauty-black.png" alt="" width="120px" height="55px"/>
+
+  </div>
+</nav>
+<div class="container-fluid register-page ">
+  <div class="head-section" >
+
+  </div>
+  <div class="register-form rounded login-page">
+
+    <h1>{% trans "E-mail Addresses" %}</h1>
+    {% for message in messages %} <p class="px-2 text-center py-3" style="color: var(--secondary-color);">{{message}}</p> {% endfor %}
+    
+    {% if user.emailaddress_set.all %}
+    <p>{% trans 'The following e-mail addresses are associated with your account:' %}</p>
+    
+    <form action="{% url 'account_email' %}" class="email_list" method="post">
+    {% csrf_token %}
+    <fieldset class="blockLabels">
+    
+      {% for emailaddress in user.emailaddress_set.all %}
+    <div class="ctrlHolder">
+          <label for="email_radio_{{forloop.counter}}" class="{% if emailaddress.primary %}primary_email{%endif%}">
+    
+          <input id="email_radio_{{forloop.counter}}" type="radio" name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{%endif %} value="{{emailaddress.email}}"/>
+    
+    {{ emailaddress.email }}
+        {% if emailaddress.verified %}
+        <span class="verified">{% trans "Verified" %}</span>
+        {% else %}
+        <span class="unverified">{% trans "Unverified" %}</span>
+        {% endif %}
+          {% if emailaddress.primary %}<span class="primary">{% trans "Primary" %}</span>{% endif %}
+    </label>
+    </div>
+      {% endfor %}
+    
+    <div class="buttonHolder">
+          <button class="secondaryAction" type="submit" name="action_primary" >{% trans 'Make Primary' %}</button>
+          <button class="secondaryAction" type="submit" name="action_send" >{% trans 'Re-send Verification' %}</button>
+          <button class="primaryAction" type="submit" name="action_remove" >{% trans 'Remove' %}</button>
+    </div>
+    
+    </fieldset>
+    </form>
+    
+    {% else %}
+    <p><strong>{% trans 'Warning:'%}</strong> {% trans "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}</p>
+    
+    {% endif %}
+    
+      {% if can_add_email %}
+        <h2>{% trans "Add E-mail Address" %}</h2>
+    
+        <form method="post" action="{% url 'account_email' %}" class="add_email">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button name="action_add" type="submit">{% trans "Add E-mail" %}</button>
+        </form>
+      {% endif %}
+    
+  </div>
+</div>
+	 <script src="js/index.js"></script>
+   <script type="text/javascript">
+    (function() {
+      var message = "{% trans 'Do you really want to remove the selected e-mail address?' %}";
+      var actions = document.getElementsByName('action_remove');
+      if (actions.length) {
+        actions[0].addEventListener("click", function(e) {
+          if (! confirm(message)) {
+            e.preventDefault();
+          }
+        });
+      }
+    })();
+    </script>
+    
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQm  DKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</body>
+</html>
+

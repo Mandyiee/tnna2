@@ -1,0 +1,29 @@
+{% extends 'main.html' %} {% load static %} 
+{% block title %} Page {% endblock title %}
+  {% block mainscreen %}
+
+  <li class="active"><a class="" href="/">Home</a></li>
+
+
+      <li><a class="" href="/profile">Get An API Key</a></li>
+
+  
+      <li><a class="" href="{% url 'account_logout' %}">Logout</a></li>
+      {% endblock mainscreen %}
+  {% block mobilescreen %}
+
+
+    <li class="active"><a class="" href="/">Home</a></li>
+
+      <li><a class="" href="/profile">Get An API Key</a></li>
+
+  
+      <li><a class="" href="{% url 'account_logout' %}">Logout</a></li>
+      {% endblock mobilescreen %}
+{% block content %}
+<div style="margin:0 auto;display:flex;align-items:center;justify-content:center; flex-direction:column;">
+    <h2 class="text-center my-3" style="font-size: 8rem;">500</h2>
+    <p class="text-center">Looks like you are lost. Go <a href="/">Home</a></p>
+</div>
+
+{% endblock content %}

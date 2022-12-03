@@ -1,0 +1,95 @@
+{% extends 'main.html' %} {% load static %} 
+{% block title %} Page {% endblock title %}
+  {% block mainscreen %}
+
+  <li class="active"><a class="" href="/">Home</a></li>
+
+
+      <li><a class="" href="/profile">Get An API Key</a></li>
+
+
+      <li><a class="" href="{% url 'account_logout' %}">Logout</a></li>
+      {% endblock mainscreen %}
+  {% block mobilescreen %}
+
+
+    <li class="active"><a class="" href="/">Home</a></li>
+
+      <li><a class="" href="/profile">Get An API Key</a></li>
+      <li><a class="" href="{% url 'account_logout' %}">Logout</a></li>
+      {% endblock mobilescreen %}
+{% block content %}
+<style>
+  .main {
+    width: min(80vw,700px);
+    margin: 0 auto;
+  }
+</style>
+{% if profile %}
+<div class="container-fluid">
+  <div class="main">
+    <div class="row">
+      <div><h2 class="py-3 text-uppercase fs-1">Your Api Key</h2></div>
+      <div>
+        <p class="text-center py-3" >{{ profile.api_key}}</p>
+        <input type="text" name="" value="{{ profile.api_key}}" id="api_key" style="overflow:hidden;background-color:transparent;opacity:0;">
+      </div>
+      <div class=""><div class="d-grid gap-2 d-flex justify-content-end">
+        <button class="add-others me-2" type="button" id="button" onclick="myFunction(event)" >Copy To Clipboard</button>
+        <form method="POST" action="/profile">
+          {% csrf_token %}
+          <input type="text" name="action"  value="generate" style="height: 0px;width:0px;overflow:hidden;background-color:transparent;opacity:0;"> 
+          <button class="add-others"  type="submit">Generate a new Key</button>
+      </form>
+       
+      </div></div>
+    </div>
+    <div class="row my-2 py-4" >
+      <div class="col-8">
+        <h4>Amount of times used </h4>
+      </div>
+      <div class="col-3">
+        <h2 class="">{{ profile.api_count }}</h2>
+      </div>
+    </div>
+    <div class="row py-3">
+      <div class="d-grid gap-2 d-flex justify-content-center">
+      <button class="add-others" type="button"><a href="{% url 'account_change_password' %}"></a> Change Password</button>
+    </div></div>
+  </div>
+
+</div>
+
+{% else %}
+<div class="container-fluid" style="display:flex;align-items:center;justify-content:center;height:80vh;width:100%; ">
+  <div class="text-center"> 
+    <h2 class="text-capitalize">You do not have a API key</h2>
+    <h5>Generate your api key</h5>
+    <form method="POST" action="/profile">
+        {% csrf_token %}
+        <input type="text" name="action" id="" value="create" style="height: 0px;width:0px;overflow:hidden;background-color:transparent;opacity:0;">
+        <button type="submit" class="add-others w-50">Generate</button> 
+    </form>
+  </div>
+    
+</div>
+{% endif %}
+
+<script>
+  const button = document.getElementById("button")
+
+  function  myFunction(event) {
+      event.preventDefault();
+      const  copyText = document.getElementById("api_key");
+      copyText.select();
+      document.execCommand("copy");
+      button.textContent = 'Copied';
+      const  myTimeout = setTimeout(function() {
+          button.textContent = 'Copy To Clipboard';
+      },  500);
+
+  }
+</script>
+
+
+{% endblock content %}

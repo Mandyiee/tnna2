@@ -18,5 +18,12 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('core.urls'))
+    path('',include('core.urls')),
+    path('accounts/', include('allauth.urls')),
+    
+
 ]
+handler404 = 'core.views.my_custom_page_not_found_view'
+handler400 = 'core.views.my_custom_bad_request_view'
+handler403 = 'core.views.my_custom_permission_denied_view'
+handler500 = 'core.views.my_custom_error_view'
