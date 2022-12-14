@@ -1,1 +1,1 @@
-web gunicorn tnna.wsgi:application --log-file -
+web: gunicorn -b 0.0.0.0:8080 tnna.wsgi:application --log-file -
