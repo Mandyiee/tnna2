@@ -155,4 +155,4 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-#CSRF_TRUSTED_ORIGINS = ['https://*.primefinanceonline.com']
+CSRF_TRUSTED_ORIGINS = ['https://*.web-production-3750.up.railway.app']
