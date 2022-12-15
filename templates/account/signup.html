@@ -23,14 +23,14 @@
     p {
       background:transparent;
     }
-    p label, p input[type=text],p input[type=password] {
+    p label, p input[type=text],p input[type=password],p input[type=email] {
       
     }
     p label {
       background:transparent;
     
     }
-    p input[type=text],p input[type=password],p input[type=email] {
+    p input[type=text],p input[type=password],p input[type=email],p input[type=email] {
       width: 75%;
       line-height: 35px;
       padding: 5px 8px;
@@ -71,7 +71,7 @@
   <div class="head-section" >
 
   </div>
-  <div class="register-form rounded login-page" style="height:fit-content;min-height:min(70%,650px);margin-top:3220px;">
+  <div class="register-form rounded login-page" style="height:fit-content;min-height:min(70%,650px);margin-top:320px;">
     <h1 class="text-center" style="background:Transparent;color:#eee;">Register</h1>
 
   {% for message in messages %} <h5 class="text-center" style="color: var(--secondary-color);">{{message}}</h5> {% endfor %}
