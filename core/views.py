@@ -11,8 +11,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
+from django.conf import settings
+from rest_framework import serializers
 # Create your views here.
-@login_required(login_url='accounts/login')
+
+
 def index(request):
     try:
         response = []
@@ -50,7 +53,6 @@ def index(request):
         }
     return render(request,'index.html',context)
 
-@login_required(login_url='accounts/login')
 @api_view(['GET'])
 def apiIndex(request):
     api_key = request.GET.get('api_key')
@@ -64,32 +66,21 @@ def apiIndex(request):
             return Response(obj)
         profile.api_count += 1
         profile.save()
-        path = Path.cwd()
-        os.chdir(Path.home())
-        #print(Path.cwd())
-        checkPath = str(Path.cwd)
-        if not 'nna/nna' in checkPath:
-            modifiedPath = os.path.join(path,'nna/nna')
-            modifiedPath = Path(modifiedPath)
-            os.chdir(modifiedPath)
-        #print(Path.cwd())
-        filepath = 'news.json'
-        if os.path.exists(Path(os.path.join(Path.cwd(),filepath))):  
-            os.remove(filepath)
-        subprocess.run(["scrapy", "crawl"])
-        f = open(filepath,'r')
-        data = f.read()
-        os.chdir(path) 
-        #return JsonResponse(data,safe=False)
+        project_path = settings.BASE_DIR
+        file_path = os.path.join(project_path, 'news.json')
+        
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        
         return Response(data)
     else:
         obj = {
-                'Invalid API key': 'your API key is not valid'
+                'No API key': 'you do have an API key'
             }
         return Response(obj)
-#Path(os.path.join(modifiedPath,'news.json'))
-#i removed this twisted-iocpsupport==1.0.2 from requirements.txt in oreder for it to work
 
+#i removed this twisted-iocpsupport==1.0.2 from requirements.txt in oreder for it to work
+@login_required(login_url='accounts/login')
 def profile(request):
     user = User.objects.get(username=request.user.username)
     
@@ -127,19 +118,13 @@ def my_custom_permission_denied_view(request,exception):
 
 
 @api_view(['GET'])
+@login_required(login_url='accounts/login')
 def apiAdmin(request):
-    path = Path.cwd()
-    os.chdir(Path.home())
-    checkPath = str(Path.cwd)
-    if not 'nna/nna' in checkPath:
-        modifiedPath = os.path.join(path,'nna/nna')
-        modifiedPath = Path(modifiedPath)
-        os.chdir(modifiedPath)
-    filepath = 'news.json'
-    if os.path.exists(Path(os.path.join(Path.cwd(),filepath))):  
-        os.remove(filepath)
-    subprocess.run(["scrapy", "crawl"])
-    f = open(filepath,'r')
-    data = f.read()
-    os.chdir(path)
+    project_path = settings.BASE_DIR
+    file_path = os.path.join(project_path, 'news.json')
+    
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+    
     return Response(data)
+

@@ -16,7 +16,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from django.core.management.utils import get_random_secret_key
-
+from celery.schedules import crontab
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,10 +48,12 @@ INSTALLED_APPS = [
     'core',
     'django.contrib.sites',
     'rest_framework',
-
+    'django_celery_beat',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'news',
+    'nna'
 ]
 
 
@@ -90,18 +92,18 @@ WSGI_APPLICATION = 'tnna.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASE_URL = os.getenv("DATABASE_URL")
-
 DATABASES = {
-    "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASE_URL = os.getenv("DATABASE_URL")
+
+# DATABASES = {
+#     "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -147,12 +149,33 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_ID = 1
+AUTHENTICATION_BACKENDS = [
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Needed to login by username in Django admin, regardless of `allauth`
+'django.contrib.auth.backends.ModelBackend',
+# `allauth` specific authentication methods, such as login by e-mail
+'allauth.account.auth_backends.AuthenticationBackend',
+
+]
+
+SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
 
+BROKER_URL = os.environ.get('RABBITMQ_URL', 'amqp://guest:guest@localhost:5672/')
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-CSRF_TRUSTED_ORIGINS = ['https://*.web-production-3750.up.railway.app']
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+ACCOUNT_EMAIL_REQUIRED=True
+
+#CSRF_TRUSTED_ORIGINS = ['https://*.web-production-3750.up.railway.app']
+
+CELERY_BEAT_SCHEDULE = {
+    "scheduled_task": {
+        "task": "core.tasks.populate_task",
+        "schedule": 100.0,
+    },
+ 
+}
